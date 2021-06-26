@@ -100,6 +100,13 @@ class LitModel(LightningModule):
         self.scheduler_cfg = scheduler_cfg
 
         self.loss_fn = nn.CrossEntropyLoss()
+        self.metrics = nn.ModuleDict(
+            {
+                "acc": Accuracy(),
+                # "prec": Precision(),
+                # "recall": Recall(),
+            }
+        )
 
     def forward(self, token_ids):
         logits = self.model(token_ids)
@@ -123,27 +130,9 @@ class LitModel(LightningModule):
         loss = self.loss_fn(logits, batch["labels"])
         probs = torch.softmax(logits, dim=1)
         metric_dict = self.compute_metrics(probs, batch["labels"], mode)
-        self.log_dict(metric_dict, on_step=False, on_epoch=True, prog_bar=True)
-        self.log(
-            f"{mode}/loss",
-            loss.item(),
-            on_step=False,
-            on_epoch=True,
-            prog_bar=True,
-        )
+        self.log_dict(metric_dict, on_epoch=True, prog_bar=True)
+        self.log(f"{mode}/loss", loss.item(), on_epoch=True, prog_bar=True)
         return loss
-
-    def setup(self, stage: Optional[str] = None):
-        self.configure_metrics()
-
-    def configure_metrics(self) -> None:
-        self.metrics = nn.ModuleDict(
-            {
-                "acc": Accuracy(),
-                # "prec": Precision(),
-                # "recall": Recall(),
-            }
-        )
 
     def compute_metrics(
         self, probs: Tensor, labels: Tensor, mode: str

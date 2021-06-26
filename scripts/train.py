@@ -10,6 +10,7 @@ from pytorch_lightning.loggers import LightningLoggerBase
 from reddit_post_classification.model import LitModel
 from reddit_post_classification.utils import (
     extras,
+    finish,
     log_artifacts,
     log_hyperparams,
 )
@@ -70,6 +71,8 @@ def main(cfg: DictConfig) -> None:
     for callback in callbacks:
         if isinstance(callback, ModelCheckpoint):
             log_artifacts(datamodule, trainer, callback)
+
+    finish(trainer.logger)
 
     return trainer.callback_metrics[cfg.monitor]
 

@@ -136,7 +136,7 @@ def log_artifacts(
 ):
     if isinstance(trainer.logger, WandbLogger):
         wandb.save(model_checkpoint.best_model_path)
-        wandb.save(datamodule.tokenizer_filename)  # type: ignore
+        wandb.save(str(datamodule.tokenizer_filename))  # type: ignore
 
 
 def finish(logger: LightningLoggerBase) -> None:

@@ -1,8 +1,8 @@
 # @package _global_
 
 # example hyperparameter optimization of some experiment with Optuna:
-# python scripts/train.py -m hparams_search=optuna
-# python scripts/train.py -m hparams_search=optuna hydra.sweeper.n_trials=30
+# python scripts/train.py -m hparams_search=cnn_optuna
+# python scripts/train.py -m hparams_search=cnn_optuna hydra.sweeper.n_trials=30
 
 defaults:
   - override /hydra/sweeper: optuna
@@ -46,6 +46,9 @@ hydra:
         type: float
         low: 0.0001
         high: 0.1
+      model.num_kernels:
+        type: categorical
+        choices: [64, 128, 256]
       model.embedding_dim:
         type: categorical
         choices: [64, 128, 256]
