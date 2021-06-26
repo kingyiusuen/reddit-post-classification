@@ -7,7 +7,7 @@ from pytorch_lightning import LightningDataModule, Trainer, seed_everything
 from pytorch_lightning.callbacks import Callback, ModelCheckpoint
 from pytorch_lightning.loggers import LightningLoggerBase
 
-from reddit_post_classification.model import LitModel
+from reddit_post_classification.models import LitModel
 from reddit_post_classification.utils import (
     extras,
     finish,
@@ -22,7 +22,6 @@ def main(cfg: DictConfig) -> None:
 
     # Set up datamodule
     datamodule: LightningDataModule = hydra.utils.instantiate(cfg.datamodule)
-    datamodule.prepare_data()
     datamodule.setup("fit")
 
     # Set up model

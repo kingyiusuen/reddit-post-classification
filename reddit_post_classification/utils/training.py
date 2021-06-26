@@ -1,4 +1,3 @@
-import logging
 import warnings
 from argparse import Namespace
 
@@ -9,27 +8,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import LightningLoggerBase, WandbLogger
 from pytorch_lightning.utilities import rank_zero_only
 
-
-def get_logger(name=__name__, level=logging.INFO) -> logging.Logger:
-    """Initializes multi-GPU-friendly python logger."""
-    log = logging.getLogger(name)
-    log.setLevel(level)
-
-    # This ensures all logging levels get marked with the rank zero decorator;
-    # otherwise, logs would get multiplied for each GPU process in multi-GPU
-    # setup.
-    for level in (
-        "debug",
-        "info",
-        "warning",
-        "error",
-        "exception",
-        "fatal",
-        "critical",
-    ):
-        setattr(log, level, rank_zero_only(getattr(log, level)))
-
-    return log
+from reddit_post_classification.utils.python_logger import get_logger
 
 
 def extras(cfg: DictConfig) -> None:
@@ -39,10 +18,10 @@ def extras(cfg: DictConfig) -> None:
     - forcing debug friendly configuration
     - forcing multi-gpu friendly configuration
     Modifies DictConfig in place.
+
     Args:
         cfg (DictConfig): Configuration composed by Hydra.
     """
-
     log = get_logger()
 
     # enable adding new keys to config

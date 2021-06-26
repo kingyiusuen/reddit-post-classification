@@ -7,6 +7,7 @@ defaults:
   - callbacks: default
   - logger: null
   - hparams_search: null
+  - scraper: default
 
 ignore_warnings: True
 
@@ -16,3 +17,6 @@ data_dir: ${work_dir}/data/
 monitor: "val/acc"
 
 subreddit_names: ["datascience", "statistics", "MachineLearning"]
+
+val_size: 0.1
+test_size: 0.1

@@ -5,148 +5,10 @@ from collections import Counter
 from pathlib import Path
 from typing import Dict, List, MutableMapping, Optional, Sequence, Union
 
-import pandas as pd
-import torch
-from pytorch_lightning import LightningDataModule
-from sklearn.model_selection import train_test_split
-from torch import Tensor
-from torch.utils.data import DataLoader, Dataset
-
 from reddit_post_classification.utils import get_logger
 
 
 log = get_logger(__name__)
-
-
-class RedditDataset(Dataset):
-    def __init__(self, fname):
-        self.data = pd.read_csv(fname)
-
-    def __getitem__(self, idx: int):
-        return self.data.iloc[idx]["text"], self.data.iloc[idx]["label"]
-
-    def __len__(self) -> int:
-        return len(self.data)
-
-
-class RedditDataModule(LightningDataModule):
-    def __init__(
-        self,
-        data_dir: str,
-        labels: List[str],
-        batch_size: int = 32,
-        num_workers: int = 0,
-        pin_memory: bool = False,
-        max_seq_len: int = 512,
-        val_size: float = 0.1,
-        test_size: float = 0.1,
-    ):
-        super().__init__()
-        self.data_dir = Path(data_dir)
-        self.labels = labels
-        self.batch_size = batch_size
-        self.num_workers = num_workers
-        self.pin_memory = pin_memory
-        self.max_seq_len = max_seq_len
-        self.val_size = val_size
-        self.test_size = test_size
-
-        processed_data_dir = self.data_dir / "processed"
-        processed_data_dir.mkdir(parents=True, exist_ok=True)
-        self.data_filenames = {
-            "train": processed_data_dir / "train.csv",
-            "val": processed_data_dir / "val.csv",
-            "test": processed_data_dir / "test.csv",
-        }
-        self.tokenizer_filename = processed_data_dir / "tokenizer.json"
-
-    def prepare_data(self) -> None:
-        if (
-            all(
-                filename.is_file() for filename in self.data_filenames.values()
-            )
-            and self.tokenizer_filename.is_file()
-        ):
-            return
-
-        df = pd.read_csv(
-            self.data_dir / "raw" / "reddit_posts.csv",
-            usecols=["title", "selftext", "subreddit_name"],
-        )
-
-        df["label"] = df["subreddit_name"].map(
-            {label: i for i, label in enumerate(self.labels)}
-        )
-
-        df.fillna("", inplace=True)
-        tokenizer = Tokenizer(do_lowercase=True)
-        df["text"] = df.apply(tokenizer.pretokenize)
-        df = df[~(df["text"] == "")]
-        df.drop(columns=["title", "selftext", "subreddit_name"], inplace=True)
-        tokenizer.train(df["text"])
-        tokenizer.save(self.tokenizer_filename)
-
-        tmp_df, val_df = train_test_split(
-            df, test_size=self.val_size, stratify=df["label"]
-        )
-        train_df, test_df = train_test_split(
-            tmp_df, test_size=self.test_size, stratify=tmp_df["label"]
-        )
-        train_df.to_csv(self.data_filenames["train"], index=False)
-        val_df.to_csv(self.data_filenames["val"], index=False)
-        test_df.to_csv(self.data_filenames["test"], index=False)
-
-    def setup(self, stage: Optional[str] = None) -> None:
-        """Set up datasets for training/testing."""
-        self.tokenizer = Tokenizer.load(self.tokenizer_filename)
-
-        if stage == "fit" or stage is None:
-            log.info("Loading train and val data...")
-            self.train_dataset = RedditDataset(self.data_filenames["train"])
-            self.val_dataset = RedditDataset(self.data_filenames["val"])
-
-        if stage == "test" or stage is None:
-            log.info("Loading test data...")
-            self.test_dataset = RedditDataset(self.data_filenames["test"])
-
-    def collate_fn(self, batch) -> Dict[str, Tensor]:
-        texts, labels = zip(*batch)
-        token_ids = self.tokenizer.batch_encode(texts)
-        token_ids = self.tokenizer.pad(token_ids, max_length=self.max_seq_len)
-        return {
-            "token_ids": torch.tensor(token_ids),
-            "labels": torch.tensor(labels),
-        }
-
-    def train_dataloader(self) -> DataLoader:
-        return DataLoader(
-            self.train_dataset,
-            batch_size=self.batch_size,
-            num_workers=self.num_workers,
-            pin_memory=self.pin_memory,
-            shuffle=True,
-            collate_fn=self.collate_fn,
-        )
-
-    def val_dataloader(self) -> DataLoader:
-        return DataLoader(
-            self.val_dataset,
-            batch_size=self.batch_size,
-            num_workers=self.num_workers,
-            pin_memory=self.pin_memory,
-            shuffle=False,
-            collate_fn=self.collate_fn,
-        )
-
-    def test_dataloader(self) -> DataLoader:
-        return DataLoader(
-            self.test_dataset,
-            batch_size=self.batch_size,
-            num_workers=self.num_workers,
-            pin_memory=self.pin_memory,
-            shuffle=False,
-            collate_fn=self.collate_fn,
-        )
 
 
 class Tokenizer:
@@ -331,7 +193,7 @@ class Tokenizer:
         log.info(f"Training finished. Current vocab size: {len(self)}.")
         return self
 
-    def save(self, filepath: Union[str, Path] = "tokenizer.json") -> None:
+    def save(self, filepath: Union[str, Path]) -> None:
         """Output configurations so that the tokenizer can be reproduced.
 
         Args:
@@ -348,7 +210,7 @@ class Tokenizer:
                 "token_to_index": self.token_to_index,
             }
             json.dump(content, fp)
-        log.info(f"Tokenizer saved to {str(filepath.name)}.")
+        log.info(f"Tokenizer saved to {str(filepath)}.")
 
     @classmethod
     def load(cls, filepath: Union[str, Path]) -> "Tokenizer":

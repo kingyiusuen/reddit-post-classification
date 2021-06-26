@@ -2,12 +2,8 @@
 outputs
 multirun
 
-# Loggers
-mlruns
+# Weights & Biases
 wandb
-
-# API keys
-praw.ini
 
 # Editors
 .vscode
@@ -23,6 +19,8 @@ __pycache__
 .pytest_cache
 htmlcov
 
+# Virtual environment
+venv
+
 # Misc
 .DS_Store
-venv

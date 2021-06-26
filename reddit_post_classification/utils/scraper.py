@@ -1,20 +1,21 @@
+from pathlib import Path
 from typing import List, Optional, Union
 
 import pandas as pd
 import praw
 
-from reddit_post_classification.utils import get_logger
+from reddit_post_classification.utils.python_logger import get_logger
 
 
 log = get_logger(__name__)
 
 
-reddit = praw.Reddit()
-
-
 class Scraper:
     def __init__(
         self,
+        client_id: str,
+        client_secret: str,
+        user_agent: str,
         subreddit_names: Union[str, List[str]],
         sort: str = "new",
         limit: int = 1000,
@@ -22,16 +23,23 @@ class Scraper:
         fname: str = "data/raw/reddit_posts.csv",
         since: Optional[int] = None,
     ):
+        self.reddit = praw.Reddit(
+            client_id=client_id,
+            client_secret=client_secret,
+            user_agent=user_agent,
+        )
         if isinstance(subreddit_names, str):
             subreddit_names = [subreddit_names]
         self.subreddit_names = subreddit_names
         self.sort = sort
         self.limit = limit
         self.selftext_only = selftext_only
-        self.fname = fname
+        self.fname = Path(fname)
+        self.fname.parent.mkdir(parents=True, exist_ok=True)
         self.since = since
 
     def scrape(self):
+        log.info("Scraping begins")
         data = []
         for subreddit_name in self.subreddit_names:
             data += self._get_posts(subreddit_name)
@@ -41,7 +49,7 @@ class Scraper:
 
     def _get_posts(self, subreddit_name):
         posts = []
-        subreddit = reddit.subreddit(subreddit_name)
+        subreddit = self.reddit.subreddit(subreddit_name)
         for post in getattr(subreddit, self.sort)(limit=self.limit):
             if self.since and post.created_utc <= self.since:
                 continue

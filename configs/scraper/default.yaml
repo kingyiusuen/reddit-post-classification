@@ -1,5 +1,10 @@
 # @package scraper
-_target_: reddit_post_classification.utils.RedditScraper
+_target_: reddit_post_classification.utils.Scraper
+
+client_id:
+client_secret:
+user_agent:
+
 subreddit_names: ${subreddit_names}
 sort: new
 limit: 1000

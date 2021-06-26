@@ -1,17 +1,17 @@
 import hydra
 from omegaconf import DictConfig
 
-from reddit_post_classification.scrape import Scraper
+from reddit_post_classification.utils import Scraper
 
 
-def main(config: DictConfig) -> None:
-    scraper: Scraper = hydra.utils.instantiate(config.scraper)
+def main(cfg: DictConfig) -> None:
+    scraper: Scraper = hydra.utils.instantiate(cfg.scraper)
     scraper.scrape()
 
 
 @hydra.main(config_path="../configs", config_name="config")
-def hydra_entry(config: DictConfig) -> None:
-    main(config)
+def hydra_entry(cfg: DictConfig) -> None:
+    main(cfg)
 
 
 if __name__ == "__main__":
