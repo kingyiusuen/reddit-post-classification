@@ -1,0 +1,28 @@
+# Hydra outputs
+outputs
+multirun
+
+# Loggers
+mlruns
+wandb
+
+# API keys
+praw.ini
+
+# Editors
+.vscode
+
+# Python
+__pycache__
+.ipynb_checkpoints
+.mypy_cache
+*.egg-info
+
+# pytest
+.coverage*
+.pytest_cache
+htmlcov
+
+# Misc
+.DS_Store
+venv

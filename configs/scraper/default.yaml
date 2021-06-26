@@ -1,0 +1,8 @@
+# @package scraper
+_target_: reddit_post_classification.utils.RedditScraper
+subreddit_names: ${subreddit_names}
+sort: new
+limit: 1000
+selftext_only: True
+fname: ${data_dir}/raw/reddit_posts.csv
+since: null

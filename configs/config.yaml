@@ -1,0 +1,18 @@
+defaults:
+  - model: cnn
+  - datamodule: reddit_datamodule
+  - optimizer: adamw
+  - scheduler: reduce_lr_on_plateau
+  - trainer: default
+  - callbacks: default
+  - logger: null
+  - hparams_search: null
+
+ignore_warnings: True
+
+work_dir: ${hydra:runtime.cwd}
+data_dir: ${work_dir}/data/
+
+monitor: "val/acc"
+
+subreddit_names: ["datascience", "statistics", "MachineLearning"]
