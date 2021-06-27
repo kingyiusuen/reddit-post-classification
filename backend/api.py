@@ -40,7 +40,7 @@ def load_artifacts():
     global model
     global labels
     cfg = OmegaConf.load("configs/config.yaml")
-    labels = cfg.subreddit_names
+    labels = list(cfg.subreddit_names)
     tokenizer = Tokenizer.load("artifacts/tokenizer.json")
     model = LitModel.load_from_checkpoint("artifacts/lit_model.ckpt")
     model.freeze()
@@ -50,7 +50,12 @@ def load_artifacts():
 @app.get("/")
 def index():
     """Health check."""
-    return "Hello, World!"
+    response = {
+        "message": HTTPStatus.OK.phrase,
+        "status-code": HTTPStatus.OK,
+        "data": {},
+    }
+    return response
 
 
 @app.post("/predict")

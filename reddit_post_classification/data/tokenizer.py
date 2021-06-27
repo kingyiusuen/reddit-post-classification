@@ -81,10 +81,14 @@ class Tokenizer:
         ]
 
     def decode(self, token_ids: Sequence[int]) -> List[str]:
-        return [
-            self.index_to_token.get(index, self.unk_token)
-            for index in token_ids
-        ]
+        tokens = []
+        for index in token_ids:
+            if index not in self.index_to_token:
+                raise RuntimeError(f"Found a new index {index}.")
+            if index in [self.pad_index, self.unk_index]:
+                continue
+            tokens.append(self.index_to_token[index])
+        return tokens
 
     def batch_encode(
         self, sequences: Sequence[Sequence[str]]

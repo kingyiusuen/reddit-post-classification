@@ -9,10 +9,7 @@ BASE_DIR = Path(__file__).parent
 with open(Path(BASE_DIR, "requirements.txt")) as file:
     required_packages = [ln.strip() for ln in file.readlines()]
 
-test_packages = [
-    "pytest==6.1.1",
-    "pytest-cov==2.12.0",
-]
+test_packages = ["pytest==6.1.1", "pytest-cov==2.12.0", "sh==1.14.2"]
 
 dev_packages = [
     "black==21.5b1",
