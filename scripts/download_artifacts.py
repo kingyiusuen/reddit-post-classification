@@ -20,7 +20,10 @@ def download_artifacts(run_path: str) -> None:
     for file in wandb_run.files():
         if file.name in artifacts:
             file.download(root=output_dir, replace=True)
-            print(f"{file.name} downloaded to {str(output_dir / file.name)}.")
+            print(
+                f"{artifacts[file.name]} downloaded to "
+                f"{str(output_dir / file.name)}."
+            )
             artifacts.pop(file.name)
 
     for artifact in artifacts:

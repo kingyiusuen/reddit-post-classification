@@ -1,5 +1,6 @@
 from typing import Optional
 
+import torch
 import torch.nn as nn
 from torch import Tensor
 
@@ -25,13 +26,14 @@ class RNN(nn.Module):
         padding_idx: Optional[int] = None,
     ):
         super().__init__()
-        num_directions = 2 if bidirectional else 1
+        self.num_directions = 2 if bidirectional else 1
+        self.rnn_type = rnn_type.lower()
         self.embeddings = nn.Embedding(
             num_embeddings=vocab_size,
             embedding_dim=embedding_dim,
             padding_idx=padding_idx,
         )
-        self.rnn = rnn_dict[rnn_type.lower()](
+        self.rnn = rnn_dict[self.rnn_type](
             input_size=embedding_dim,
             hidden_size=rnn_hidden_dim,
             num_layers=rnn_num_layers,
@@ -40,7 +42,7 @@ class RNN(nn.Module):
             batch_first=True,
         )
         self.fc = nn.Linear(
-            in_features=rnn_hidden_dim * num_directions,
+            in_features=rnn_hidden_dim * self.num_directions,
             out_features=num_labels,
         )
 
@@ -57,13 +59,19 @@ class RNN(nn.Module):
         embedded = self.embeddings(token_ids)
         # (batch_size, seq_len, embedding_dim)
 
-        output, _ = self.rnn(embedded)
-        # (batch_size, seq_len, num_directions * rnn_hidden_dim)
+        if self.rnn_type == "lstm":
+            _, (hidden, _) = self.rnn(embedded)
+        else:
+            _, hidden = self.rnn(embedded)
+        # (num_directions * num_layers, batch_size, rnn_hidden_dim)
 
-        last_output = output[:, -1, :]
-        # (batch_size, num_directions * rnn_hidden_dim)
+        if self.num_directions:
+            hidden = torch.cat((hidden[-2, :, :], hidden[-1, :, :]), dim=1)
+        else:
+            hidden = hidden[-1, :, :]
+        # (batch_size, rnn_hidden_dim * num_directions)
 
-        logits = self.fc(last_output)
+        logits = self.fc(hidden)
         # (batch_size, num_labels)
 
         return logits

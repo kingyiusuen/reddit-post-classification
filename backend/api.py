@@ -8,7 +8,7 @@ from omegaconf import OmegaConf
 
 from backend.schemas import Post
 from reddit_post_classification.data import Tokenizer
-from reddit_post_classification.model import LitModel
+from reddit_post_classification.models import LitModel
 from reddit_post_classification.utils import get_logger
 
 
