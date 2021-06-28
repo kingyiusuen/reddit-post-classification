@@ -5,7 +5,13 @@ import wandb
 
 
 def download_artifacts(run_path: str) -> None:
-    """Download model checkpoint."""
+    """Download model checkpoint and tokenizer configurations.
+
+    Args:
+        run_path: The run path for a run, in the format of
+            '<entity>/<project>/<run_id>'. To find the run path for a run, go
+            to the Overview tab in wandb dashboard.
+    """
     output_dir = Path(__file__).parents[1].resolve() / "artifacts"
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -30,7 +36,7 @@ def download_artifacts(run_path: str) -> None:
         print(f"{artifact} not found.")
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("run_path", type=str)
     args = parser.parse_args()

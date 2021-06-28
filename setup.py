@@ -6,7 +6,7 @@ from setuptools import setup
 BASE_DIR = Path(__file__).parent
 
 
-with open(Path(BASE_DIR, "requirements.txt")) as file:
+with open(BASE_DIR / "requirements.txt") as file:
     required_packages = [ln.strip() for ln in file.readlines()]
 
 test_packages = ["pytest==6.1.1", "pytest-cov==2.12.0", "sh==1.14.2"]
@@ -17,6 +17,7 @@ dev_packages = [
     "isort==5.8.0",
     "mypy==0.812",
     "pre-commit==2.13.0",
+    "pydocstyle==6.1.1",
 ]
 
 setup(

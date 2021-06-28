@@ -8,16 +8,23 @@ from reddit_post_classification.data import Tokenizer
 def test_add_token_and_len():
     tokenizer = Tokenizer()
     assert tokenizer._add_token("a") == 2
+    assert tokenizer._add_token("a") == 2
     assert len(tokenizer) == 3
 
 
-def test_train():
-    tokenizer = Tokenizer(do_lowercase=True, min_frequency=2)
+def test_train_tokenizer():
+    tokenizer = Tokenizer(do_lowercase=True, min_frequency=2, capacity=5)
     tokenizer.train(["machine learning", "data", "learning data science"])
     for token in ["data", "learning"]:
         assert token in tokenizer.token_to_index
     for token in ["machine", "science"]:
         assert token not in tokenizer.token_to_index
+
+
+def test_train_full_tokenizer():
+    tokenizer = Tokenizer(do_lowercase=True, capacity=2)
+    with pytest.raises(Exception):
+        tokenizer.train(["analysis"])
 
 
 def test_encode_and_decode():
@@ -51,6 +58,7 @@ def test_batch_encode_and_decode():
         (2, "longest", [[2, 2], [2, 2], [2, 0]]),
         (4, "max_length", [[2, 2, 2, 0], [2, 2, 0, 0], [2, 0, 0, 0]]),
         (None, "max_length", ValueError),
+        (None, "will_cause_an_error", ValueError),
     ],
 )
 def test_pad(max_length, padding, expected):

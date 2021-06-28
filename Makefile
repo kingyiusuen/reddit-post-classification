@@ -39,11 +39,12 @@ lint:
 	black .
 	flake8 .
 	mypy .
+	pydocstyle .
 
 # Tests
 .PHONY: test
 test:
-	pytest --cov reddit_post_classification --cov app --cov-report html
+	pytest --cov reddit_post_classification --cov backend --cov-report html
 
 .PHONY: test-non-training
 test-non-training:
@@ -59,4 +60,3 @@ clean:
 	find . -type f -name ".coverage*" -ls -delete
 	rm -rf htmlcov
 	rm -rf .mypy_cache
-	rm -rf outputs

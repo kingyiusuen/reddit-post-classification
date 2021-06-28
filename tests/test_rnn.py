@@ -4,17 +4,20 @@ import torch
 from reddit_post_classification.models.modules import RNN
 
 
-@pytest.fixture(params=["RNN", "GRU", "LSTM"])
+@pytest.fixture(
+    params=[("RNN", True), ("GRU", True), ("LSTM", True), ("RNN", False)]
+)
 def params(request):
+    rnn_type, bidirectional = request.param
     return {
         "vocab_size": 100,
         "num_labels": 3,
         "embedding_dim": 64,
-        "rnn_type": request.param,
+        "rnn_type": rnn_type,
         "rnn_hidden_dim": 64,
         "rnn_dropout": 0.2,
         "rnn_num_layers": 2,
-        "bidirectional": True,
+        "bidirectional": bidirectional,
         "padding_idx": 0,
     }
 
@@ -25,7 +28,7 @@ def model(params):
 
 
 def test_init(params, model):
-    assert model.num_directions == 2
+    assert model.num_directions == 2 if params["bidirectional"] else 1
     assert model.rnn_type == params["rnn_type"].lower()
     assert model.embeddings.weight.shape == (
         params["vocab_size"],

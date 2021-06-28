@@ -10,6 +10,7 @@ defaults:
   - scraper: default
 
 ignore_warnings: True
+debug: False
 
 work_dir: ${hydra:runtime.cwd}
 data_dir: ${work_dir}/data/

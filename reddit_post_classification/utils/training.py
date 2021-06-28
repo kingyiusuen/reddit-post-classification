@@ -12,7 +12,9 @@ from reddit_post_classification.utils.python_logger import get_logger
 
 
 def extras(cfg: DictConfig) -> None:
-    """A couple of optional utilities, controlled by main config file:
+    """A couple of optional utilities, controlled by main config file.
+
+    Options include:
     - disabling warnings
     - easier access to debug mode
     - forcing debug friendly configuration
@@ -67,7 +69,8 @@ def extras(cfg: DictConfig) -> None:
     OmegaConf.set_struct(cfg, True)
 
 
-def empty(*args, **kwargs):
+def empty(*args, **kwargs) -> None:
+    """A dummy function."""
     pass
 
 
@@ -77,6 +80,7 @@ def log_hyperparams(
     lit_model: LightningModule,
     trainer: Trainer,
 ) -> None:
+    """Log hyperparameters."""
     hparams = {}
 
     # Save Hydra configs
@@ -109,10 +113,11 @@ def log_hyperparams(
 
 
 def log_artifacts(
-    datamodule: LightningDataModule,
     trainer: Trainer,
+    datamodule: LightningDataModule,
     model_checkpoint: ModelCheckpoint,
-):
+) -> None:
+    """Log artifacts."""
     if isinstance(trainer.logger, WandbLogger):
         wandb.save(model_checkpoint.best_model_path)
         wandb.save(str(datamodule.tokenizer_filename))  # type: ignore

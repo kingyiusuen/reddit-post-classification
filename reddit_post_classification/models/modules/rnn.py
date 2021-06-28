@@ -13,6 +13,21 @@ rnn_dict = {
 
 
 class RNN(nn.Module):
+    """Recurrent Neural Netowrk.
+
+    Args:
+        num_labels: Number of classes.
+        vocab_size: Size of the dictionary of embeddings.
+        embedding_dim: The size of each embedding vector.
+        rnn_type: The type of RNN cell to use. Accepts the following values:
+            `RNN`, `LSTM`, `GRU` (case-insensitive).
+        rnn_hidden_dim: The number of features in the hidden state.
+        rnn_dropout: Probability of an element to be zeroed in a RNN layer.
+        rnn_num_layers: Number of recurrent layers.
+        bidirectional: Use a bidirectional RNN or not.
+        padding_dix: The index of the padding token.
+    """
+
     def __init__(
         self,
         num_labels: int,
@@ -24,7 +39,7 @@ class RNN(nn.Module):
         rnn_num_layers: int = 2,
         bidirectional: bool = True,
         padding_idx: Optional[int] = None,
-    ):
+    ) -> None:
         super().__init__()
         self.num_directions = 2 if bidirectional else 1
         self.rnn_type = rnn_type.lower()
@@ -65,7 +80,7 @@ class RNN(nn.Module):
             _, hidden = self.rnn(embedded)
         # (num_directions * num_layers, batch_size, rnn_hidden_dim)
 
-        if self.num_directions:
+        if self.num_directions == 2:
             hidden = torch.cat((hidden[-2, :, :], hidden[-1, :, :]), dim=1)
         else:
             hidden = hidden[-1, :, :]

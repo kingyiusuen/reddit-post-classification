@@ -1,9 +1,9 @@
 # @package scraper
 _target_: reddit_post_classification.utils.Scraper
 
-client_id:
-client_secret:
-user_agent:
+client_id: null
+client_secret: null
+user_agent: null
 
 subreddit_names: ${subreddit_names}
 sort: new

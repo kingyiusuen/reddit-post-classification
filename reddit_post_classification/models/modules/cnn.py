@@ -8,16 +8,28 @@ from torch import Tensor
 
 
 class CNN(nn.Module):
+    """1-D Convoluational Neural Netowrk.
+
+    Args:
+        num_labels: Number of classes.
+        vocab_size: Size of the dictionary of embeddings.
+        embedding_dim: The size of each embedding vector.
+        kernel_sizes: A list of kernel sizes.
+        num_kernesl: Number of kernels for each kernel size.
+        dropout: Probability of an element to be zeroed.
+        padding_dix: The index of the padding token.
+    """
+
     def __init__(
         self,
-        vocab_size: int,
         num_labels: int,
+        vocab_size: int,
         embedding_dim: int = 128,
         kernel_sizes: List[int] = [2, 4, 6, 8, 10],
         num_kernels: int = 128,
         dropout: float = 0.2,
         padding_idx: Optional[int] = None,
-    ):
+    ) -> None:
         super().__init__()
         self.kernel_sizes = kernel_sizes
         self.embeddings = nn.Embedding(

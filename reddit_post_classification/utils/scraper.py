@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 import praw
@@ -11,6 +11,28 @@ log = get_logger(__name__)
 
 
 class Scraper:
+    """Scrape posts from subreddits and save them in a csv file.
+
+    Args:
+        client_id: The OAuth client id associated with your registered Reddit
+            application.
+        client_secret: The OAuth client secret associated with your registered
+            Reddit application.
+        user_agent: A unique description of your application.
+        subreddit_names: Names of the subreddits to be scraped. Can be either
+            a string or a list of strings.
+        sort: How to iterate through the posts (e.g., 'hot', 'top',
+            'controversial'). See the documentation of PRAW for all possible
+            choices,
+        limit: Maximum number of posts to scrape per subreddit. Actual number
+            may be smaller than this, depending on the `sort` method and
+            whether `selftext_only` and `since` are used.
+        selftext_only: Scrape posts with selftext only.
+        fname: Path of the output file.
+        since: Scrape posts with a UTC time greater than (more recent than)
+            this value.
+    """
+
     def __init__(
         self,
         client_id: str,
@@ -22,7 +44,11 @@ class Scraper:
         selftext_only: bool = True,
         fname: str = "data/raw/reddit_posts.csv",
         since: Optional[int] = None,
-    ):
+    ) -> None:
+        if any(x is None for x in [client_id, client_secret, user_agent]):
+            raise ValueError(
+                "client_id, client_secret and user_agent are required."
+            )
         self.reddit = praw.Reddit(
             client_id=client_id,
             client_secret=client_secret,
@@ -38,7 +64,8 @@ class Scraper:
         self.fname.parent.mkdir(parents=True, exist_ok=True)
         self.since = since
 
-    def scrape(self):
+    def scrape(self) -> None:
+        """Main method to scrape posts from subreddits."""
         log.info("Scraping begins")
         data = []
         for subreddit_name in self.subreddit_names:
@@ -47,7 +74,12 @@ class Scraper:
         df = pd.DataFrame(data, columns=headers)
         df.to_csv(self.fname, index=False)
 
-    def _get_posts(self, subreddit_name):
+    def _get_posts(self, subreddit_name: str) -> List[Dict[str, Any]]:
+        """Scrape posts from a subreddit.
+
+        Args:
+            subreddit_name: Name of the subreddit to be scraped.
+        """
         posts = []
         subreddit = self.reddit.subreddit(subreddit_name)
         for post in getattr(subreddit, self.sort)(limit=self.limit):

@@ -33,7 +33,7 @@ class Tokenizer:
         min_frequency: Optional[int] = 10,
         capacity: Optional[int] = None,
         token_to_index: Optional[Dict[str, int]] = None,
-    ):
+    ) -> None:
         self.pad_token = pad_token
         self.unk_token = unk_token
         self.do_lowercase = do_lowercase
@@ -54,6 +54,7 @@ class Tokenizer:
             self.unk_index = self.token_to_index[self.unk_token]
 
     def __len__(self) -> int:
+        """Returns the vocab size."""
         return len(self.token_to_index)
 
     def _add_token(self, token: str) -> int:
@@ -76,11 +77,13 @@ class Tokenizer:
         return index
 
     def encode(self, tokens: Sequence[str]) -> List[int]:
+        """Convert a sequence of tokens into a sequence of indices."""
         return [
             self.token_to_index.get(token, self.unk_index) for token in tokens
         ]
 
     def decode(self, token_ids: Sequence[int]) -> List[str]:
+        """Convert a sequence of indices into a sequence of tokens."""
         tokens = []
         for index in token_ids:
             if index not in self.index_to_token:
@@ -93,14 +96,17 @@ class Tokenizer:
     def batch_encode(
         self, sequences: Sequence[Sequence[str]]
     ) -> List[List[int]]:
+        """Convert sequences of tokens into sequences of indices."""
         return [self.encode(tokens) for tokens in sequences]
 
     def batch_decode(
         self, sequences: Sequence[Sequence[int]]
     ) -> List[List[str]]:
+        """Convert sequences of indices into sequences of tokens."""
         return [self.decode(token_ids) for token_ids in sequences]
 
     def pretokenize(self, post: MutableMapping) -> str:
+        """Text preprocessing before tokenization."""
         # Remove tags
         post["title"] = re.sub(r"\[[A-Z]+\]", "", post["title"])
         # Concatenate title and selftext
@@ -143,13 +149,18 @@ class Tokenizer:
                 and max_length is not None, the length of the sequences will be
                 min(longest_length, max_length).
 
+        Raises:
+            ValueError: Padding methods not recognized.
+            ValueError: `max_length` is None when the padding method is
+                "max_length".
+
         Returns:
             Padded sequences.
         """
         if padding == "max_length":
             if max_length is None:
                 raise ValueError(
-                    "max_length cannot be None when padding method is "
+                    "max_length cannot be None when the padding method is "
                     "'max_length'."
                 )
             else:
@@ -171,18 +182,18 @@ class Tokenizer:
             padded_sequences.append(padded_sequence)
         return padded_sequences
 
-    def train(
-        self,
-        sequences: Union[Sequence[str]],
-    ) -> "Tokenizer":
+    def train(self, sequences: Union[Sequence[str]]) -> "Tokenizer":
         """Train the tokenizer.
 
         Args:
-            texts: The batch of input sequences.
+            sequences: The batch of input sequences.
+
+        Returns:
+            A `Tokenizer` object.
         """
         n = self.capacity - len(self) if self.capacity else None
         if n is not None and n <= 0:
-            return self
+            raise RuntimeError("The tokenizer capacity is already full.")
 
         log.info("Training tokenizer...")
         counter: Counter = Counter()

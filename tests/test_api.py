@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
+import pytest
 from fastapi.testclient import TestClient
-from pytest import approx
 
 from backend import api
 from backend.api import app
@@ -25,23 +25,37 @@ def test_index():
     assert response.json()["message"] == HTTPStatus.OK.phrase
 
 
-def test_predict():
+@pytest.mark.parametrize(
+    "title, selftext",
+    [
+        ("How do I become a data scientist?", "I love data science."),
+        ("How do I become a machine learning engineer?", None),
+    ],
+)
+def test_predict(title, selftext):
     data = {
-        "title": "How do I become a data scientist?",
-        "selftext": "I love data science.",
+        "title": title,
+        "selftext": selftext,
     }
     response = client.post("/predict", json=data)
     assert response.status_code == HTTPStatus.OK
     assert response.request.method == "POST"
     assert sum(
         pred["probability"] for pred in response.json()["data"]["predictions"]
-    ) == approx(1, abs=1e-3)
+    ) == pytest.approx(1, abs=1e-3)
 
 
-def test_empty_predict():
+@pytest.mark.parametrize(
+    "title, selftext",
+    [
+        (None, None),
+        (None, "This should not work"),
+    ],
+)
+def test_empty_predict(title, selftext):
     data = {
-        "title": None,
-        "selftext": None,
+        "title": title,
+        "selftext": selftext,
     }
     response = client.post("/predict", json=data)
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY

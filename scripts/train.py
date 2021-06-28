@@ -69,7 +69,11 @@ def main(cfg: DictConfig) -> None:
 
     for callback in callbacks:
         if isinstance(callback, ModelCheckpoint):
-            log_artifacts(datamodule, trainer, callback)
+            log_artifacts(
+                trainer=trainer,
+                datamodule=datamodule,
+                model_checkpoint=callback,
+            )
 
     finish(trainer.logger)
 

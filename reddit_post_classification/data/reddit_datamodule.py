@@ -15,6 +15,18 @@ log = get_logger(__name__)
 
 
 class RedditDataModule(LightningDataModule):
+    """A class that handles data processing.
+
+    Args:
+        data_dir: Directory to the data.
+        labels: A list of subreddit names.
+        batch_size: The number samples to load per batch.
+        num_workers: The number of subprocesses to use for data loading.
+        pin_memory: Whether to copy Tensors into CUDA pinned memory before
+            returning them.
+        max_seq_len: Maximum number of tokens per sequence.
+    """
+
     def __init__(
         self,
         data_dir: str,
@@ -23,7 +35,7 @@ class RedditDataModule(LightningDataModule):
         num_workers: int = 0,
         pin_memory: bool = False,
         max_seq_len: int = 512,
-    ):
+    ) -> None:
         super().__init__()
         self.data_dir = Path(data_dir)
         self.labels = labels
@@ -54,6 +66,7 @@ class RedditDataModule(LightningDataModule):
             self.test_dataset = RedditDataset(self.data_filenames["test"])
 
     def collate_fn(self, batch) -> Dict[str, Tensor]:
+        """Collate a batch of samples."""
         texts, labels = zip(*batch)
         token_ids = self.tokenizer.batch_encode(texts)
         token_ids = self.tokenizer.pad(token_ids, max_length=self.max_seq_len)
@@ -63,6 +76,7 @@ class RedditDataModule(LightningDataModule):
         }
 
     def train_dataloader(self) -> DataLoader:
+        """Returns a dataloader for the train dataset."""
         return DataLoader(
             self.train_dataset,
             batch_size=self.batch_size,
@@ -73,6 +87,7 @@ class RedditDataModule(LightningDataModule):
         )
 
     def val_dataloader(self) -> DataLoader:
+        """Returns a dataloader for the validation dataset."""
         return DataLoader(
             self.val_dataset,
             batch_size=self.batch_size,
@@ -83,6 +98,7 @@ class RedditDataModule(LightningDataModule):
         )
 
     def test_dataloader(self) -> DataLoader:
+        """Returns a dataloader for the test dataset."""
         return DataLoader(
             self.test_dataset,
             batch_size=self.batch_size,

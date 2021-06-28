@@ -1,10 +1,10 @@
+import json
 from http import HTTPStatus
 from typing import Dict
 
 import torch
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from omegaconf import OmegaConf
 
 from backend.schemas import Post
 from reddit_post_classification.data import Tokenizer
@@ -12,7 +12,7 @@ from reddit_post_classification.models import LitModel
 from reddit_post_classification.utils import get_logger
 
 
-logger = get_logger(__name__)
+log = get_logger(__name__)
 
 
 app = FastAPI(
@@ -36,15 +36,16 @@ app.add_middleware(
 
 @app.on_event("startup")
 def load_artifacts():
+    """Load artifacts for inference."""
     global tokenizer
     global model
     global labels
-    cfg = OmegaConf.load("configs/config.yaml")
-    labels = list(cfg.subreddit_names)
+    with open("artifacts/subreddit_names.json") as f:
+        labels = json.load(f)
     tokenizer = Tokenizer.load("artifacts/tokenizer.json")
     model = LitModel.load_from_checkpoint("artifacts/lit_model.ckpt")
     model.freeze()
-    logger.info("Artifacts loaded successfully. Ready for inference.")
+    log.info("Artifacts loaded successfully. Ready for inference.")
 
 
 @app.get("/")
@@ -61,6 +62,8 @@ def index():
 @app.post("/predict")
 def predict(request: Request, post: Post) -> Dict:
     """Predict which subreddit a post belongs to."""
+    if post.selftext is None:
+        post.selftext = ""
     text = tokenizer.pretokenize(vars(post))  # type: ignore
     token_ids = tokenizer.encode(text)  # type: ignore
     token_ids = torch.tensor([token_ids])
