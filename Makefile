@@ -3,10 +3,7 @@ help:
 	@echo "Commands:"
 	@echo "install            : installs requirements."
 	@echo "install-dev        : installs development requirements."
-	@echo "install-test       : installs test requirements."
 	@echo "venv               : sets up virtual environment for development."
-	@echo "test               : runs all tests."
-	@echo "test-non-training  : runs non-training tests."
 	@echo "lint               : runs linting."
 	@echo "clean              : cleans all unnecessary files."
 
@@ -20,10 +17,6 @@ install-dev:
 	pip install -e ".[dev]" --no-cache-dir
 	pre-commit install
 	pre-commit autoupdate
-
-.PHONY: install-test
-install-test:
-	pip install -e ".[test]" --no-cache-dir
 
 # Set up virtual environment
 venv:
@@ -40,15 +33,6 @@ lint:
 	flake8 .
 	mypy .
 	pydocstyle .
-
-# Tests
-.PHONY: test
-test:
-	pytest --cov reddit_post_classification --cov backend --cov-report html
-
-.PHONY: test-non-training
-test-non-training:
-	pytest -m "not training"
 
 # Cleaning
 .PHONY: clean

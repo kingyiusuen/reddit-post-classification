@@ -83,7 +83,7 @@ If you use Google Colab to train your model and use a Weights & Biases logger, t
 python scripts/download_artifacts.py RUN_PATH
 ```
 
-Replace RUN_PATH with the path of the run that you want to download the artifacts from. For example, the run path of my best run is `kingyiusuen/reddit-post-classification/2pzfr3t3`.
+Replace RUN_PATH with the path of the run that you want to download the artifacts from. For example, the run path of my best run is `kingyiusuen/reddit-post-classification/lu3h4mrn`.
 
 ## RESTful API
 
