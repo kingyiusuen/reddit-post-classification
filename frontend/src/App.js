@@ -39,7 +39,7 @@ class App extends Component {
         "selftext": inputSelfText
       })
     };
-    fetch("https://0.0.0.0:5000/predict", params)
+    fetch("http://0.0.0.0:5000/predict", params)
       .then(response => response.json())
       .then(response => response.data.predictions)
       .then(predictions => this.showResults(predictions))
