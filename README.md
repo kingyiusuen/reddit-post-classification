@@ -10,6 +10,8 @@ It can be tricky to find the right subreddit to submit your post when your post 
 
 In this project, I scraped a total of around 2,600 posts from [r/statistics](https:/www.reddit.com/r/statistics), [r/MachineLearning](https:/www.reddit.com/r/MachineLearning) and [r/datascience](https://www.reddit.com/r/datascience), trained a classifer to predict the subreddit of the posts, and built a data product that suggests which subreddit you should post to.
 
+![Screenshot](screenshot.gif)
+
 The app is deployed to [Heroku](https://reddit-post-classifer.herokuapp.com/). (Heroku apps go to a sleeping mode when it doesn't receive any request for about 30 mins, so it may take a minute or two to load up the frontend and another minute to wake the backend up to get the predictions).
 
 What I learned along the way:
