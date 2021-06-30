@@ -9,7 +9,11 @@ BASE_DIR = Path(__file__).parent
 with open(BASE_DIR / "requirements.txt") as file:
     required_packages = [ln.strip() for ln in file.readlines()]
 
-test_packages = ["pytest==6.1.1", "pytest-cov==2.12.0", "sh==1.14.2"]
+test_packages = [
+    "pytest==6.1.1",
+    "pytest-cov==2.12.0",
+    "sh==1.14.2",
+]
 
 dev_packages = [
     "black==21.5b1",
@@ -18,6 +22,9 @@ dev_packages = [
     "mypy==0.812",
     "pre-commit==2.13.0",
     "pydocstyle==6.1.1",
+]
+
+docs_packages = [
     "mkdocs==1.2.1",
     "mkdocs-macros-plugin==0.5.12",
     "mkdocs-material==7.1.9",
@@ -48,7 +55,8 @@ setup(
     python_requires=">=3.6",
     install_requires=[required_packages],
     extras_require={
+        "dev": test_packages + dev_packages + docs_packages,
+        "docs": docs_packages,
         "test": test_packages,
-        "dev": test_packages + dev_packages,
     },
 )

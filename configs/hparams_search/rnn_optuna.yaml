@@ -40,8 +40,8 @@ hydra:
     search_space:
       optimizer.lr:
         type: float
-        low: 0.001
-        high: 0.1
+        low: 0.0001
+        high: 0.01
       model.embedding_dim:
         type: categorical
         choices: [64, 128, 256]
@@ -58,5 +58,5 @@ hydra:
         step: 0.1
       model.rnn_num_layers:
         type: int
-        low: 3
+        low: 2
         high: 5

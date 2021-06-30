@@ -87,7 +87,7 @@ Replace RUN_PATH with the path of the run that you want to download the artifact
 
 ## RESTful API
 
-To start the API,
+To start the API, use
 
 ```
 uvicorn backend.api:app --host 0.0.0.0 --port 5000 --reload
@@ -97,9 +97,11 @@ Go to [https://0.0.0.0:5000/docs](https://0.0.0.0:5000/docs) for the documentati
 
 ## Frontend
 
-Note that the frontend is built with React.js, so Node.js is required for it to run.
+To open the frontend, use
 
 ```
 cd frontend
 npm start
 ```
+
+Note that the frontend is built with React.js, so Node.js is required for it to run. You should also start the backend API when the frontend is running; otherwise, the frontend cannot connect to the backend to get the predictions.

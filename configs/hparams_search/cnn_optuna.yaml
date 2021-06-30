@@ -41,13 +41,13 @@ hydra:
       optimizer.lr:
         type: float
         low: 0.0001
-        high: 0.001
+        high: 0.01
       model.num_kernels:
         type: categorical
-        choices: [128, 256, 512]
+        choices: [64, 128, 256]
       model.embedding_dim:
         type: categorical
-        choices: [128, 256, 512]
+        choices: [64, 128, 256]
       model.dropout:
         type: float
         low: 0.1
