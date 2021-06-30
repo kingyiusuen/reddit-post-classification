@@ -1,5 +1,5 @@
 # @package scraper
-_target_: reddit_post_classification.utils.Scraper
+_target_: reddit_post_classification.Scraper
 
 client_id: null
 client_secret: null

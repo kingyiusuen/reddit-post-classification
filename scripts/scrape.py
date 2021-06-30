@@ -1,7 +1,7 @@
 import hydra
 from omegaconf import DictConfig
 
-from reddit_post_classification.utils import Scraper
+from reddit_post_classification.scraper import Scraper
 
 
 def main(cfg: DictConfig) -> None:

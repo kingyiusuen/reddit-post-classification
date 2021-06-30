@@ -24,7 +24,7 @@ const Form = ({ shouldHide, handleSubmit }) => {
   const classes = useStyles();
 
   const [inputTitle, setInputTitle] = useState("");
-  const [InputSelftext, setInputSelftext] = useState("");
+  const [inputSelftext, setInputSelftext] = useState("");
   const updateInputTitle = e => {
     setInputTitle(e.target.value);
   };
@@ -35,7 +35,7 @@ const Form = ({ shouldHide, handleSubmit }) => {
   return (
     <form
       className={`classes.container ${shouldHide ? classes.hidden : ""}`}
-      onSubmit={e => handleSubmit(e, inputTitle, InputSelftext)}
+      onSubmit={e => handleSubmit(e, inputTitle, inputSelftext)}
     >
       <TextField
         variant="outlined"
@@ -57,7 +57,7 @@ const Form = ({ shouldHide, handleSubmit }) => {
         name="text"
         label="Text (Optional)"
         id="text"
-        value={InputSelftext}
+        value={inputSelftext}
         onChange={updateInputSelftext}
       />
       <div className={classes.buttonDiv}>

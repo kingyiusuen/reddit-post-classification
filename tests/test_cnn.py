@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from reddit_post_classification.models.modules import CNN
+from reddit_post_classification.models import CNN
 
 
 @pytest.fixture

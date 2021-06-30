@@ -1,3 +1,6 @@
+import json
+import logging
+import tempfile
 import warnings
 from argparse import Namespace
 
@@ -8,7 +11,27 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import LightningLoggerBase, WandbLogger
 from pytorch_lightning.utilities import rank_zero_only
 
-from reddit_post_classification.utils.python_logger import get_logger
+
+def get_logger(name=__name__, level=logging.INFO) -> logging.Logger:
+    """Initializes multi-GPU-friendly python logger."""
+    log = logging.getLogger(name)
+    log.setLevel(level)
+
+    # This ensures all logging levels get marked with the rank zero decorator;
+    # otherwise, logs would get multiplied for each GPU process in multi-GPU
+    # setup.
+    for level in (
+        "debug",
+        "info",
+        "warning",
+        "error",
+        "exception",
+        "fatal",
+        "critical",
+    ):
+        setattr(log, level, rank_zero_only(getattr(log, level)))
+
+    return log
 
 
 def extras(cfg: DictConfig) -> None:
@@ -69,7 +92,7 @@ def extras(cfg: DictConfig) -> None:
     OmegaConf.set_struct(cfg, True)
 
 
-def empty(*args, **kwargs) -> None:
+def _empty(*args, **kwargs) -> None:
     """A dummy function."""
     pass
 
@@ -109,7 +132,7 @@ def log_hyperparams(
     # Disable logging any more hyperparameters for all loggers
     # This is just a trick to prevent trainer from logging hparams of model,
     # since we already did that above
-    trainer.logger.log_hyperparams = empty  # type: ignore
+    trainer.logger.log_hyperparams = _empty  # type: ignore
 
 
 def log_artifacts(
@@ -121,6 +144,12 @@ def log_artifacts(
     if isinstance(trainer.logger, WandbLogger):
         wandb.save(model_checkpoint.best_model_path)
         wandb.save(str(datamodule.tokenizer_filename))  # type: ignore
+        with tempfile.TemporaryDirectory() as temp_dir:
+            label_filename = f"{temp_dir}/subreddit_names.json"
+            with open(label_filename, "w") as fp:
+                json.dump(list(datamodule.labels), fp)  # type: ignore
+            wandb.save(label_filename)
+            finish(trainer.logger)
 
 
 def finish(logger: LightningLoggerBase) -> None:

@@ -4,35 +4,13 @@ from typing import Any, Dict, List, Optional, Union
 import pandas as pd
 import praw
 
-from reddit_post_classification.utils.python_logger import get_logger
+from reddit_post_classification.utils import get_logger
 
 
 log = get_logger(__name__)
 
 
 class Scraper:
-    """Scrape posts from subreddits and save them in a csv file.
-
-    Args:
-        client_id: The OAuth client id associated with your registered Reddit
-            application.
-        client_secret: The OAuth client secret associated with your registered
-            Reddit application.
-        user_agent: A unique description of your application.
-        subreddit_names: Names of the subreddits to be scraped. Can be either
-            a string or a list of strings.
-        sort: How to iterate through the posts (e.g., 'hot', 'top',
-            'controversial'). See the documentation of PRAW for all possible
-            choices,
-        limit: Maximum number of posts to scrape per subreddit. Actual number
-            may be smaller than this, depending on the `sort` method and
-            whether `selftext_only` and `since` are used.
-        selftext_only: Scrape posts with selftext only.
-        fname: Path of the output file.
-        since: Scrape posts with a UTC time greater than (more recent than)
-            this value.
-    """
-
     def __init__(
         self,
         client_id: str,
@@ -45,6 +23,27 @@ class Scraper:
         fname: str = "data/raw/reddit_posts.csv",
         since: Optional[int] = None,
     ) -> None:
+        """Scrape posts from subreddits and save them in a csv file.
+
+        Args:
+            client_id: The OAuth client id associated with your registered
+                Reddit application.
+            client_secret: The OAuth client secret associated with your
+                registered Reddit application.
+            user_agent: A unique description of your application.
+            subreddit_names: Names of the subreddits to be scraped. Can be
+                either a string or a list of strings.
+            sort: How to iterate through the posts (e.g., 'hot', 'top',
+                'controversial'). See the documentation of PRAW for all
+                possible choices.
+            limit: Maximum number of posts to scrape per subreddit. Actual
+                number may be smaller than this, depending on the `sort` method
+                and whether `selftext_only` and `since` are used.
+            selftext_only: Scrape posts with selftext only.
+            fname: Path of the output file.
+            since: Scrape posts with a UTC time greater than (more recent than)
+                this value.
+        """
         if any(x is None for x in [client_id, client_secret, user_agent]):
             raise ValueError(
                 "client_id, client_secret and user_agent are required."

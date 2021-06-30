@@ -19,6 +19,7 @@ def download_artifacts(run_path: str) -> None:
     wandb_run = api.run(f"{run_path}")
 
     artifacts = {
+        "subreddit_names.json": "Label file",
         "tokenizer.json": "Tokenizer",
         "lit_model.ckpt": "Model checkpoint",
     }

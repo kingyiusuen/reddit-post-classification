@@ -18,6 +18,10 @@ dev_packages = [
     "mypy==0.812",
     "pre-commit==2.13.0",
     "pydocstyle==6.1.1",
+    "mkdocs==1.2.1",
+    "mkdocs-macros-plugin==0.5.12",
+    "mkdocs-material==7.1.9",
+    "mkdocstrings==0.15.2",
 ]
 
 setup(

@@ -1,6 +1,9 @@
 # @package model
-_target_: reddit_post_classification.models.modules.CNN
+_target_: reddit_post_classification.models.CNN
 kernel_sizes: [2, 4, 6, 8, 10]
 num_kernels: 128
 embedding_dim: 128
 dropout: 0.3
+num_labels: ???
+vocab_size: ???
+padding_idx: ???

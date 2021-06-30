@@ -1,7 +1,7 @@
 # @package _global_
 
 # example hyperparameter optimization of some experiment with Optuna:
-# python scripts/train.py -m hparams_search=rnn_optuna hydra.sweeper.n_trials=30
+# python scripts/train.py -m model=RNN hparams_search=rnn_optuna hydra.sweeper.n_trials=30
 
 defaults:
   - override /hydra/sweeper: optuna
@@ -40,14 +40,14 @@ hydra:
     search_space:
       optimizer.lr:
         type: float
-        low: 0.0001
-        high: 0.01
+        low: 0.001
+        high: 0.1
       model.embedding_dim:
         type: categorical
         choices: [64, 128, 256]
       model.rnn_type:
         type: categorical
-        choices: [RNN, GRU, LSTM]
+        choices: [GRU, LSTM]
       model.rnn_hidden_dim:
         type: categorical
         choices: [64, 128, 256]
@@ -58,5 +58,5 @@ hydra:
         step: 0.1
       model.rnn_num_layers:
         type: int
-        low: 2
+        low: 3
         high: 5

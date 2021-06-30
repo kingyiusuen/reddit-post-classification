@@ -21,7 +21,7 @@ const Footer = () => {
   return (
     <footer className={classes.footer}>
       <Typography variant="body2" align="center">
-       <Link color="inherit" href="https://github.com/kingyiusuen">
+       <Link color="inherit" href="https://github.com/kingyiusuen/reddit-post-classification">
         <GitHubIcon className={classes.icon}/>
        </Link>
       </Typography>

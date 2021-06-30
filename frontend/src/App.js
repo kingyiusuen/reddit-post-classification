@@ -6,20 +6,23 @@ import Footer from "./Footer";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Snackbar from '@material-ui/core/Snackbar';
+import { withStyles } from '@material-ui/core/styles'
 
-const containerStyle = {
-  display: "flex",
-  flexDirection: "column",
-  minHeight: "100vh"
-}
+const styles = (theme) => ({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100vh"
+  }
+});
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       shouldHideForm: false,
-      predictions: null,
       shouldShowError: false,
+      predictions: null,
     };
   };
 
@@ -36,11 +39,11 @@ class App extends Component {
         "selftext": inputSelfText
       })
     };
-    fetch("http://127.0.0.1:8000/predict", params)
+    fetch("https://0.0.0.0:5000/predict", params)
       .then(response => response.json())
       .then(response => response.data.predictions)
       .then(predictions => this.showResults(predictions))
-      .catch(err => {this.setState({shouldShowError: true})});
+      .catch(err => { this.setState({ shouldShowError: true }) })
   }
 
   showResults = (predictions) => {
@@ -54,14 +57,16 @@ class App extends Component {
     this.setState({ shouldHideForm: false })
   }
 
-  handleClose = () => {
+  handleCloseSnackBar = () => {
     this.setState({ shouldShowError: false })
   }
 
   render() {
+    const { classes } = this.props;
+
     return (
       <React.Fragment>
-      <Container component="main" maxWidth="sm" style={containerStyle}>
+      <Container component="main" maxWidth="sm" className={classes.container}>
         <CssBaseline />
         <Header />
         <Form
@@ -78,7 +83,7 @@ class App extends Component {
         autoHideDuration={6000}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         open={this.state.shouldShowError}
-        onClose={this.handleClose}
+        onClose={this.handleCloseSnackBar}
         message="Server Connection Error"
       />
       </React.Fragment>
@@ -86,4 +91,4 @@ class App extends Component {
   }
 };
 
-export default App;
+export default withStyles(styles)(App);

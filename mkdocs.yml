@@ -1,0 +1,39 @@
+# Project information
+site_name: Reddit Post Classification
+site_url: https://madewithml.com/#mlops
+site_description: Predict whether a post belongs to r/statistics, r/datascience or r/MachineLearning.
+site_author: King Yiu Suen
+
+# Repository
+repo_url: https://github.com/kingyiusuen/reddit-post-classification
+repo_name: kingyiusuen/reddit-post-classification
+edit_uri: ""  # disables edit button
+
+# Configuration
+theme:
+  name: material
+
+# Plugins
+plugins:
+  - search
+  - macros
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_root_heading: false
+            show_source: true
+            show_category_heading: true
+      watch:
+        - reddit_post_classification
+
+# Page tree
+nav:
+  - Home: index.md
+  - Getting Started: getting_started.md
+  - Reference:
+    - Data: reference/data.md
+    - Models: reference/models.md
+    - Scraper: reference/scraper.md
+    - Utilities: reference/utils.md

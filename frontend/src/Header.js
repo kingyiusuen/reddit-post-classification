@@ -2,6 +2,7 @@ import React from "react";
 
 import Avatar from "@material-ui/core/Avatar";
 import RedditIcon from "@material-ui/icons/Reddit";
+import Link from '@material-ui/core/Link';
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -29,10 +30,10 @@ const Header = () => {
         <RedditIcon fontSize="large" />
       </Avatar>
       <Typography variant="h4" align="center" color="textPrimary" gutterBottom>
-        Subreddit Classifer
+        Reddit Post Classifer
       </Typography>
       <Typography variant="h6" align="center" color="textSecondary" component="p">
-        Finding the right subreddit to submit your post to? Put your post here to get some suggestions!
+        Put a post here to decide whether it should belong to <Link href="https://www.reddit.com/r/datascience">r/datascience</Link>, <Link href="https://www.reddit.com/r/statistics">r/statistics</Link> or <Link href="https://www.reddit.com/r/MachineLearning">r/MachineLearning</Link>.
       </Typography>
     </div>
   )

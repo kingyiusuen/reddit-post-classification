@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Results = ({hideResults, predictions}) => {
+const Results = ({shouldHide, predictions}) => {
   const classes = useStyles();
 
   return (
@@ -60,7 +60,7 @@ const Results = ({hideResults, predictions}) => {
         <Button
           variant="contained"
           color="primary"
-          onClick={hideResults}
+          onClick={shouldHide}
           className={classes.button}
         >
           Back

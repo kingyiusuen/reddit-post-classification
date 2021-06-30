@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from reddit_post_classification.models.modules import RNN
+from reddit_post_classification.models import RNN
 
 
 @pytest.fixture(

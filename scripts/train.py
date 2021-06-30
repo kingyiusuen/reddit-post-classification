@@ -1,7 +1,6 @@
 from typing import List, Optional
 
 import hydra
-import torch.nn as nn
 from omegaconf import DictConfig
 from pytorch_lightning import LightningDataModule, Trainer, seed_everything
 from pytorch_lightning.callbacks import Callback, ModelCheckpoint
@@ -10,7 +9,6 @@ from pytorch_lightning.loggers import LightningLoggerBase
 from reddit_post_classification.models import LitModel
 from reddit_post_classification.utils import (
     extras,
-    finish,
     log_artifacts,
     log_hyperparams,
 )
@@ -25,15 +23,15 @@ def main(cfg: DictConfig) -> None:
     datamodule.setup("fit")
 
     # Set up model
-    model: nn.Module = hydra.utils.instantiate(
-        cfg.model,
-        num_labels=len(datamodule.labels),  # type: ignore
-        vocab_size=len(datamodule.tokenizer),  # type: ignore
-        padding_idx=datamodule.tokenizer.pad_index,  # type: ignore
-    )
+    extra_model_configs = {
+        "num_labels": len(datamodule.labels),  # type: ignore
+        "vocab_size": len(datamodule.tokenizer),  # type: ignore
+        "padding_idx": datamodule.tokenizer.pad_index,  # type: ignore
+    }
+    cfg.model.update(extra_model_configs)
 
     lit_model = LitModel(
-        model=model,
+        model_cfg=cfg.model,
         optimizer_cfg=cfg.optimizer,
         scheduler_cfg=cfg.scheduler,
     )
@@ -74,8 +72,6 @@ def main(cfg: DictConfig) -> None:
                 datamodule=datamodule,
                 model_checkpoint=callback,
             )
-
-    finish(trainer.logger)
 
     return trainer.callback_metrics[cfg.monitor]
 
