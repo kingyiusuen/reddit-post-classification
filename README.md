@@ -1,5 +1,11 @@
 # Reddit Post Classification
 
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/kingyiusuen/reddit-post-classification/blob/master/.pre-commit-config.yaml)
+![testing status](https://github.com/kingyiusuen/reddit-post-classification/actions/workflows/testing.yml/badge.svg)
+[![License](https://img.shields.io/github/license/kingyiusuen/reddit-post-classification)](https://github.com/kingyiusuen/reddit-post-classification/blob/master/LICENSE)
+
+
 It can be tricky to find the right subreddit to submit your post when your post is about statistics, machine learning and data science, as there is a great deal of overlap between them.
 
 In this project, I scraped a total of around 2,600 posts from [r/statistics](https:/www.reddit.com/r/statistics), [r/MachineLearning](https:/www.reddit.com/r/MachineLearning) and [r/datascience](https://www.reddit.com/r/datascience), trained a classifer to predict the subreddit of the posts, and built a data product that suggests which subreddit you should post to.
