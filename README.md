@@ -12,7 +12,7 @@ In this project, I scraped a total of around 2,600 posts from [r/statistics](htt
 
 ![Screenshot](screenshot.gif)
 
-The app is deployed to [Heroku](https://reddit-post-classifer.herokuapp.com/). (Heroku apps go to a sleeping mode when it doesn't receive any request for about 30 mins, so it may take a minute or two to load up the frontend and another minute to wake the backend up to get the predictions).
+The app is deployed to [Heroku](https://reddit-post-classifer.herokuapp.com/). (Heroku apps go to a sleeping mode when it doesn't receive any request for about 30 mins, so it may take a minute or two to load up the frontend and another minute for the backend to wake up and get the predictions).
 
 What I learned along the way:
 
@@ -22,7 +22,7 @@ What I learned along the way:
 - [x] Hyperparameter tuning with Optuna
 - [x] Experiment tracking with Weights & Biases
 - [x] Tesing with Pytest
-- [x] Developing a RESTful API with FastAPI
+- [x] Developing a REST API with FastAPI
 - [x] Frontend development with React.js
 - [x] Containerization with Docker
 - [x] Deployment to Heroku
