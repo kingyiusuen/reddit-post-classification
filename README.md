@@ -25,11 +25,9 @@ What I learned along the way:
 
 ## Results
 
-A model combining TF-IDF and logistic regression already has a test accuracy of 0.8471 (see [notebooks/02-baseline_models.ipynb](notebooks/02-baseline_models.ipynb)).
+A model combining TF-IDF and logistic regression already has a test accuracy of 0.8471 (see [notebooks/02-baseline_models.ipynb](notebooks/02-baseline_models.ipynb)). CNN does a little better with a test accuracy of 0.8595, which took 11 epochs and 39 seconds to train (see the run on [Weights & Biases](https://wandb.ai/kingyiusuen/reddit-post-classification/runs/lu3h4mrn)).
 
-CNN does a little better with a test accuracy of 0.8595, which took 11 epochs and 39 seconds to train (see the run on [Weights & Biases](https://wandb.ai/kingyiusuen/reddit-post-classification/runs/lu3h4mrn)).
-
-I deployed the web app with the CNN model just for practice. The TF-IDF + logistic regression model is smaller in size but just as good.
+I deployed the web app with the CNN model for practice. The TF-IDF + logistic regression model is smaller in size but is just as good.
 
 ## Quick Start
 
