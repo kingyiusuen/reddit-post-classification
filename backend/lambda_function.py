@@ -27,15 +27,9 @@ def clean_text(text):
 def lambda_handler(event, context):
     logger.info(event)
 
-    if "text" not in event:
-        logger.error("Key 'text' not found in event.")
-        return {
-            "status_code": 400,
-            "body": {"message": "Missing input."},
-        }
-
     try:
-        text = clean_text(event["text"])
+        text = event["body"]["text"]
+        text = clean_text(text)
         probs = model.predict_proba([text])[0]
         return {
             "status_code": 200,
