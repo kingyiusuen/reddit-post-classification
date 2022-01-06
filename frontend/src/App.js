@@ -2,12 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./App.css";
 
-const { REACT_APP_API_ENDPOINT, REACT_APP_API_KEY } = process.env;
-
-const headers = {
-  "Content-Type": "application/json",
-  "X-API-Key": REACT_APP_API_KEY,
-};
+const API_ENDPOINT =
+  "https://6xg6k6icxb.execute-api.us-east-1.amazonaws.com/default/predict-reddit-post";
+const { REACT_APP_API_KEY } = process.env;
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,9 +19,14 @@ const App = () => {
 
     try {
       const res = await axios.post(
-        REACT_APP_API_ENDPOINT,
+        API_ENDPOINT,
         { text },
-        { headers }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-Api-Key": REACT_APP_API_KEY,
+          },
+        }
       );
       setPredictions(res.payload);
     } catch (error) {
