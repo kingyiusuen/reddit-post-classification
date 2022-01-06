@@ -1,9 +1,5 @@
-# Hydra outputs
-outputs
-multirun
-
-# Weights & Biases
-wandb
+# API
+secrets.json
 
 # Editors
 .vscode
@@ -24,4 +20,3 @@ venv
 
 # Misc
 .DS_Store
-artifacts

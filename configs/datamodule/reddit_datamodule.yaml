@@ -1,8 +1,0 @@
-# @package datamodule
-_target_: reddit_post_classification.data.RedditDataModule
-data_dir: ${data_dir}
-labels: ${subreddit_names}
-batch_size: 128
-num_workers: 0
-pin_memory: false
-max_seq_len: 768
