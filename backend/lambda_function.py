@@ -25,6 +25,8 @@ def clean_text(text):
 
 
 def lambda_handler(event, context):
+    logger.info(event)
+
     if "text" not in event:
         logger.error("Key 'text' not found in event.")
         return {
