@@ -35,13 +35,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Build Docker image
-        run: docker build --tag reddit-post-classifer --file backend/Dockerfile .
+        run: docker build --tag reddit-post-classifier --file backend/Dockerfile .
       - name: Push image to ECR
         uses: jwalton/gh-ecr-push@v1
         with:
           access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           region: us-east-1
-          image: reddit-post-classifer:latest
+          image: reddit-post-classifier:latest
       - name: Update lambda with image
         run: aws lambda update-function-code --function-name predict-reddit-post --image-uri 250854891162.dkr.ecr.us-east-1.amazonaws.com/reddit-post-classifier:latest
