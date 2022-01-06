@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./App.css";
 
-const API_URL =
-  "https://fepn17mdb7.execute-api.us-east-1.amazonaws.com/default/predict-reddit-post";
+const { REACT_APP_API_ENDPOINT, REACT_APP_API_KEY } = process.env;
+
+const headers = {
+  "Content-Type": "application/json",
+  "X-API-Key": REACT_APP_API_KEY,
+};
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,8 +19,13 @@ const App = () => {
     setIsLoading(true);
     setError("");
     const text = event.target.text.value;
+
     try {
-      const res = await axios.post(API_URL, { text });
+      const res = await axios.post(
+        REACT_APP_API_ENDPOINT,
+        { text },
+        { headers }
+      );
       setPredictions(res.payload);
     } catch (error) {
       setError("Something went wrong");

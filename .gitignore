@@ -1,5 +1,6 @@
-# API
+# Secrets
 secrets.json
+.env
 
 # Editors
 .vscode
