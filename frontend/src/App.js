@@ -1,94 +1,76 @@
-import React, { Component } from "react";
-import Header from "./Header";
-import Form from "./Form";
-import Results from "./Results";
-import Footer from "./Footer";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Container from "@material-ui/core/Container";
-import Snackbar from '@material-ui/core/Snackbar';
-import { withStyles } from '@material-ui/core/styles'
+import React, { useState } from "react";
+import axios from "axios";
+import "./App.css";
 
-const styles = (theme) => ({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    minHeight: "100vh"
-  }
-});
+const API_URL =
+  "https://fepn17mdb7.execute-api.us-east-1.amazonaws.com/default/predict-reddit-post";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      shouldHideForm: false,
-      shouldShowError: false,
-      predictions: null,
-    };
+const App = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [predictions, setPredictions] = useState({});
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    setError("");
+    const text = event.target.text.value;
+    try {
+      const res = await axios.post(API_URL, { text });
+      setPredictions(res.payload);
+    } catch (error) {
+      setError("Something went wrong");
+    }
+    setIsLoading(false);
   };
 
-  handleSubmit = (e, inputTitle, inputSelfText) => {
-    e.preventDefault();
+  return (
+    <div className="wrapper">
+      <div className="container">
+        <img src="../reddit-icon.svg" alt="Reddit Icon" className="logo" />
+        <h1>Reddit Post Classifier</h1>
+        <p>
+          Not sure whether your post should go to{" "}
+          <a href="https://www.reddit.com/r/MachineLearning/">
+            r/MachineLearning
+          </a>{" "}
+          or{" "}
+          <a href="https://www.reddit.com/r/learnmachinelearning/">
+            r/LearnMachineLearning
+          </a>
+          ? Put your post below and we will decide it for you!
+        </p>
 
-    const params = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        "title": inputTitle,
-        "selftext": inputSelfText
-      })
-    };
-    fetch("http://0.0.0.0:5000/predict", params)
-      .then(response => response.json())
-      .then(response => response.data.predictions)
-      .then(predictions => this.showResults(predictions))
-      .catch(err => { this.setState({ shouldShowError: true }) })
-  }
-
-  showResults = (predictions) => {
-    this.setState({
-      shouldHideForm: true,
-      predictions: predictions,
-    });
-  }
-
-  hideResults = () => {
-    this.setState({ shouldHideForm: false })
-  }
-
-  handleCloseSnackBar = () => {
-    this.setState({ shouldShowError: false })
-  }
-
-  render() {
-    const { classes } = this.props;
-
-    return (
-      <React.Fragment>
-      <Container component="main" maxWidth="sm" className={classes.container}>
-        <CssBaseline />
-        <Header />
-        <Form
-          shouldHide={this.state.shouldHideForm}
-          handleSubmit={this.handleSubmit}
-        />
-        {this.state.shouldHideForm && <Results
-          hideResults={this.hideResults}
-          predictions={this.state.predictions}
-        />}
-        <Footer />
-      </Container>
-      <Snackbar
-        autoHideDuration={6000}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        open={this.state.shouldShowError}
-        onClose={this.handleCloseSnackBar}
-        message="Server Connection Error"
-      />
-      </React.Fragment>
-    );
-  }
+        <form onSubmit={handleSubmit}>
+          <textarea
+            placeholder="Put your post here"
+            rows="6"
+            defaultValue={defaultText}
+            name="text"
+          ></textarea>
+          <div>
+            <button type="submit" className="btn" disabled={isLoading}>
+              {isLoading ? "Predicting..." : "Submit"}
+            </button>
+          </div>
+        </form>
+        <div className="predictions">
+          {Object.keys(predictions).map((subreddit) => {
+            return (
+              <p>
+                <span className="bold">{subreddit}: </span>
+                {predictions[subreddit]}%
+              </p>
+            );
+          })}
+        </div>
+        <div className="error">{error}</div>
+      </div>
+    </div>
+  );
 };
 
-export default withStyles(styles)(App);
+export default App;
+
+const defaultText = `What are your hopes for Machine Learning in 2022?
+I was just wondering what some of you are hoping ML can accomplish or overcome in this new year - interested in hearing your thoughts!`;
