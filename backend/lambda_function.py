@@ -8,13 +8,6 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-headers = {
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Allow-Origin": "https://master.d12233i7lji2r8.amplifyapp.com",
-    "Access-Control-Allow-Methods": "OPTIONS,POST",
-}
-
-
 with open("artifacts/model.pickle", "rb") as f:
     model = pickle.load(f)
 
@@ -36,7 +29,6 @@ def lambda_handler(event, context):
         logger.error("Key 'text' not found in event.")
         return {
             "status_code": 400,
-            "headers": headers,
             "body": {"message": "Missing input."},
         }
 
@@ -45,7 +37,6 @@ def lambda_handler(event, context):
         probs = model.predict_proba([text])[0]
         return {
             "status_code": 200,
-            "headers": headers,
             "body": {
                 "message": "Success",
                 "predictions": {
@@ -58,6 +49,5 @@ def lambda_handler(event, context):
         logger.error(e)
         return {
             "status_code": 500,
-            "headers": headers,
             "body": {"message": "Something went wrong."},
         }
