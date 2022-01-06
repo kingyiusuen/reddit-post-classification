@@ -7,6 +7,7 @@ import string
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+headers = {"Access-Control-Allow-Origin": "*"}
 
 with open("artifacts/model.pickle", "rb") as f:
     model = pickle.load(f)
@@ -29,24 +30,28 @@ def lambda_handler(event, context):
         logger.error("Key 'text' not found in event.")
         return {
             "status_code": 400,
-            "message": "Missing input.",
+            "header": headers,
+            "body": {"message": "Missing input."},
         }
 
     try:
         text = clean_text(event["text"])
         probs = model.predict_proba([text])[0]
-        payload = {
-            "r/MachineLearning": probs[0],
-            "r/LearnMachineLearning": probs[1],
-        }
         return {
             "status_code": 200,
-            "message": "Success",
-            "payload": payload,
+            "headers": headers,
+            "body": {
+                "message": "Success",
+                "predictions": {
+                    "r/MachineLearning": probs[0],
+                    "r/LearnMachineLearning": probs[1],
+                },
+            },
         }
     except Exception as e:
         logger.error(e)
         return {
             "status_code": 500,
-            "message": "Something went wrong.",
+            "headers": headers,
+            "body": {"message": "Something went wrong."},
         }
