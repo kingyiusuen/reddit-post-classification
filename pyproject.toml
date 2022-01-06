@@ -1,0 +1,19 @@
+[tool.black]
+line-length = 79
+exclude = '''
+/(
+      \.eggs
+    | \.git
+    | \.mypy_cache
+    | venv
+  )/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 79
+multi_line_output = 3
+include_trailing_comma = true
+lines_after_imports = 2
+skip_gitignore = true
+virtual_env = "venv"
