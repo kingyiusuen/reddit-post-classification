@@ -7,7 +7,9 @@ import string
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+
 headers = {"Access-Control-Allow-Origin": "*"}
+
 
 with open("artifacts/model.pickle", "rb") as f:
     model = pickle.load(f)
