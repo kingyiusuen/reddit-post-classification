@@ -3,7 +3,7 @@ import axios from "axios";
 import "./App.css";
 
 const API_ENDPOINT =
-  "https://6xg6k6icxb.execute-api.us-east-1.amazonaws.com/default/predict-reddit-post";
+  "https://7cwwewixgd.execute-api.us-east-1.amazonaws.com/default/predict-reddit-post";
 const { REACT_APP_API_KEY } = process.env;
 
 const App = () => {
