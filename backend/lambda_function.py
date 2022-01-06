@@ -1,5 +1,8 @@
 import logging
 import pickle
+import re
+import string
+
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -7,6 +10,18 @@ logger.setLevel(logging.INFO)
 
 with open("artifacts/model.pickle", "rb") as f:
     model = pickle.load(f)
+
+
+def clean_text(text):
+    text = re.sub(r"http\S+", "", text)
+    translator = str.maketrans(
+        string.punctuation, " " * len(string.punctuation)
+    )
+    text = text.translate(translator)
+    text = re.sub(r"\s{1,}", " ", text)
+    text = text.strip()
+    text = text.lower()
+    return text
 
 
 def lambda_handler(event, context):
@@ -18,13 +33,16 @@ def lambda_handler(event, context):
         }
 
     try:
-        probs = model.predict_proba([event["text"]])[0]
+        text = clean_text(event["text"])
+        probs = model.predict_proba([text])[0]
+        payload = {
+            "r/MachineLearning": probs[0],
+            "r/LearnMachineLearning": probs[1],
+        }
         return {
             "status_code": 200,
             "message": "Success",
-            "payload": {
-                "probs": probs,
-            },
+            "payload": payload,
         }
     except Exception as e:
         logger.error(e)
