@@ -9,7 +9,9 @@ logger.setLevel(logging.INFO)
 
 
 headers = {
-    "Access-Control-Allow-Origin": "master.d12233i7lji2r8.amplifyapp.com"
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Origin": "https://master.d12233i7lji2r8.amplifyapp.com",
+    "Access-Control-Allow-Methods": "OPTIONS,POST",
 }
 
 

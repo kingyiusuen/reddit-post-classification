@@ -14,10 +14,6 @@ repos:
       - id: black
         args: []
         files: .
-  - repo: https://github.com/PyCQA/flake8
-    rev: 3.9.2
-    hooks:
-      - id: flake8
   - repo: https://github.com/PyCQA/isort
     rev: 5.9.1
     hooks:
