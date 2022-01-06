@@ -2,37 +2,20 @@
 help:
 	@echo "Commands:"
 	@echo "install            : installs requirements."
-	@echo "install-dev        : installs development requirements."
 	@echo "venv               : sets up virtual environment for development."
-	@echo "lint               : runs linting."
 	@echo "clean              : cleans all unnecessary files."
 
 # Installation
 .PHONY: install
 install:
-	pip install -e . --no-cache-dir
-
-.PHONY: install-dev
-install-dev:
-	pip install -e ".[dev]" --no-cache-dir
-	pre-commit install
-	pre-commit autoupdate
+	pip install -r requirements.txt
 
 # Set up virtual environment
 venv:
 	python3 -m venv venv
 	source venv/bin/activate && \
-	python -m pip install --upgrade pip setuptools wheel && \
-	make install-dev
-
-# Linting
-.PHONY: lint
-lint:
-	isort .
-	black .
-	flake8 .
-	mypy .
-	pydocstyle .
+	python -m pip install --upgrade pip && \
+	make install
 
 # Cleaning
 .PHONY: clean

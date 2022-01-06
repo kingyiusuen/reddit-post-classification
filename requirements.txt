@@ -1,5 +1,4 @@
 matplotlib==3.5.1
-nltk==3.6.7
 praw==7.5.0
 pandas==1.2.5
 pytest==6.1.1
