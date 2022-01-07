@@ -31,22 +31,24 @@ def lambda_handler(event, context):
     try:
         body = json.loads(event["body"])
         text = body["text"]
-        logger.info(text)
         text = clean_text(text)
+        logger.info(text)
         probs = model.predict_proba([text])[0]
         return {
-            "status_code": 200,
-            "body": {
-                "message": "Success",
-                "predictions": {
-                    "r/MachineLearning": probs[0],
-                    "r/LearnMachineLearning": probs[1],
-                },
-            },
+            "statusCode": 200,
+            "body": json.dumps(
+                {
+                    "message": "Success",
+                    "predictions": {
+                        "r/MachineLearning": probs[0],
+                        "r/LearnMachineLearning": probs[1],
+                    },
+                }
+            ),
         }
     except Exception as e:
         logger.error(e)
         return {
-            "status_code": 500,
-            "body": {"message": "Something went wrong."},
+            "statusCode": 500,
+            "body": json.dumps({"message": "Something went wrong."}),
         }
