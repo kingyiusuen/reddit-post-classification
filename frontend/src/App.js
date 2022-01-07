@@ -3,8 +3,7 @@ import axios from "axios";
 import "./App.css";
 
 const API_ENDPOINT =
-  "https://7cwwewixgd.execute-api.us-east-1.amazonaws.com/default/predict-reddit-post";
-const { REACT_APP_API_KEY } = process.env;
+  "https://4e9c20e0wf.execute-api.us-east-1.amazonaws.com/default/predict-reddit-post";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,16 +17,7 @@ const App = () => {
     const text = event.target.text.value;
 
     try {
-      const res = await axios.post(
-        API_ENDPOINT,
-        { text },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-Api-Key": REACT_APP_API_KEY,
-          },
-        }
-      );
+      const res = await axios.post(API_ENDPOINT, { text: "I love ML" });
       setPredictions(res.payload);
     } catch (error) {
       setError("Something went wrong");

@@ -33,7 +33,7 @@ docker build --tag reddit-post-classifier --file backend/Dockerfile .
 Run the Docker image as a container.
 
 ```
-docker run -p 9000:8080 -it --rm reddit-post-classifier --platform linux/amd64
+docker run -p 9000:8080 -it --rm reddit-post-classifier
 ```
 
 Test the container with a POST request.
