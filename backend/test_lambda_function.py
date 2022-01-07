@@ -11,4 +11,4 @@ def test_valid_input():
 def test_invalid_input():
     event = {}
     response = lambda_handler(event, None)
-    assert response["status_code"] == 400
+    assert response["status_code"] == 500
