@@ -29,7 +29,7 @@ def lambda_handler(event, context):
     logger.info(event)
 
     try:
-        body = event["body"]
+        body = json.loads(event["body"])
         text = body["text"]
         logger.info(text)
         text = clean_text(text)
