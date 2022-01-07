@@ -31,6 +31,7 @@ def lambda_handler(event, context):
         text = event["body"]["text"]
         text = clean_text(text)
         probs = model.predict_proba([text])[0]
+        logger.info(probs)
         return {
             "status_code": 200,
             "body": {
