@@ -29,7 +29,7 @@ def lambda_handler(event, context):
     logger.info(event)
 
     try:
-        text = json.loads(event)["body"]["text"]
+        text = json.loads(event["body"])["text"]
         text = clean_text(text)
         logger.info(text)
         probs = model.predict_proba([text])[0]

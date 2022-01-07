@@ -4,7 +4,7 @@ from lambda_function import lambda_handler
 
 
 def test_valid_input():
-    event = json.dumps({"body": {"text": "I love machine learning."}})
+    event = {"body": json.dumps({"text": "I love machine learning."})}
     response = lambda_handler(event, None)
     assert response["status_code"] == 200
     assert len(response["body"]["predictions"]) == 2
