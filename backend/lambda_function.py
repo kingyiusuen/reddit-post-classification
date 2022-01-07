@@ -1,3 +1,4 @@
+import json
 import logging
 import pickle
 import re
@@ -28,12 +29,10 @@ def lambda_handler(event, context):
     logger.info(event)
 
     try:
-        text = event["body"]["text"]
+        text = json.loads(event)["body"]["text"]
         text = clean_text(text)
         logger.info(text)
-        probs = model.predict_proba([text])
-        logger.info(probs)
-        probs = probs[0]
+        probs = model.predict_proba([text])[0]
         return {
             "status_code": 200,
             "body": {
