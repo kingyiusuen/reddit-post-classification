@@ -2,7 +2,6 @@
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/kingyiusuen/reddit-post-classification/blob/master/.pre-commit-config.yaml)
-![Deployment status](https://github.com/kingyiusuen/reddit-post-classification/actions/workflows/deployment.yml/badge.svg)
 [![License](https://img.shields.io/github/license/kingyiusuen/reddit-post-classification)](https://github.com/kingyiusuen/reddit-post-classification/blob/master/LICENSE)
 
 It can be tricky to find the right subreddit to submit your post. For example, it is not uncommon to find people posted in [r/MachineLearning](https:/www.reddit.com/r/MachineLearning) when they should have posted in [r/LearningMachineLearning](https://www.reddit.com/r/learnmachinelearning) (which is for beginner's questions).
