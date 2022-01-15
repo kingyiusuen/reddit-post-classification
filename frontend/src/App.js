@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./App.css";
 
-const API_ENDPOINT = "http://ec2-52-55-85-90.compute-1.amazonaws.com:8080/predict";
+const API_ENDPOINT = "http://localhost:8080/predict";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -55,9 +55,9 @@ const App = () => {
           </div>
         </form>
         <div className="predictions">
-          {Object.keys(predictions).map((subreddit) => {
+          {Object.keys(predictions).map((subreddit, index) => {
             return (
-              <p>
+              <p key={index}>
                 <span className="bold">{subreddit}: </span>
                 {Math.round(predictions[subreddit] * 100)}%
               </p>

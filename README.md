@@ -27,6 +27,12 @@ git clone https://github.com/kingyiusuen/reddit-post-classification.git
 make venv
 ```
 
+Start the backend server.
+
+```
+python backend/app.py
+```
+
 Start the frontend server.
 
 ```
@@ -34,11 +40,7 @@ cd frontend
 npm start
 ```
 
-Start the backend server. At the project root directory, run
-
-```
-python backend/app.py
-```
+To start scraping, follow the structure of `secrets.example.json` and create a `secrets.json` file at the project root directory. Fill out the necessary information.
 
 ### Docker
 
@@ -59,7 +61,3 @@ Test the container with a POST request.
 ```
 curl -XPOST "http://0.0.0.0:8080/predict" -H 'Content-Type: application/json' -d '{"text": "I love machine learning"}'
 ```
-
-## Referecnes
-
-[How to Deploy a Docker App to AWS using Elastic Container Service (ECS)](https://www.youtube.com/watch?v=zs3tyVgiBQQ)
