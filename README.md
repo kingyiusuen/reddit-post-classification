@@ -13,7 +13,7 @@ It will be useful if there is a tool that
 - helps new users post to the right subreddit, and
 - allows subreddit moderators to easily identify posts that might not belong to their particular subreddit.
 
-In this project, I used Python Reddit API Wrapper (PRAW) to scrape a total of around 1,500 posts from r/MachineLearning and r/LearningMachineLearning, and trained a classifer (TF-IDF + logistic regression) to predict the subreddit of the posts. The model has an AUC score of 0.7 in the test set. Finally, I built a web app that suggests which subreddit you should post to with React.js. The backend API was built with Flask, containerized with Docker and deployed to AWS ECS.
+In this project, I used Python Reddit API Wrapper (PRAW) to scrape a total of around 1,500 posts from r/MachineLearning and r/LearningMachineLearning, and trained a classifer (TF-IDF + logistic regression) to predict the subreddit of the posts. The model has an AUC score of 0.7 in the test set. Finally, I built a web app that suggests which subreddit you should post to with React.js. The backend API was built with Flask and was containerized with Docker.
 
 ![Screenshot](figures/app_screenshot.png)
 
