@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./App.css";
 
-const API_ENDPOINT =
-  "https://4e9c20e0wf.execute-api.us-east-1.amazonaws.com/default/predict-reddit-post";
+const API_ENDPOINT = "http://ec2-52-55-85-90.compute-1.amazonaws.com:8080/predict";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,8 +16,8 @@ const App = () => {
     const text = event.target.text.value;
 
     try {
-      const res = await axios.post(API_ENDPOINT, { text: "I love ML" });
-      setPredictions(res.payload);
+      const res = await axios.post(API_ENDPOINT, { text });
+      setPredictions(res.data.predictions);
     } catch (error) {
       setError("Something went wrong");
     }
@@ -60,7 +59,7 @@ const App = () => {
             return (
               <p>
                 <span className="bold">{subreddit}: </span>
-                {predictions[subreddit]}%
+                {Math.round(predictions[subreddit] * 100)}%
               </p>
             );
           })}
@@ -73,5 +72,4 @@ const App = () => {
 
 export default App;
 
-const defaultText = `What are your hopes for Machine Learning in 2022?
-I was just wondering what some of you are hoping ML can accomplish or overcome in this new year - interested in hearing your thoughts!`;
+const defaultText = `Hi, I would like to know who are the current leading researchers/ research groups in AI Robotics and other in Theoretical Reinforcement Learning.`;
